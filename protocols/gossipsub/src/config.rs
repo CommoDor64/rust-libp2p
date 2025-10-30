@@ -133,6 +133,8 @@ pub struct Config {
     idontwant_message_size_threshold: usize,
     idontwant_on_publish: bool,
     topic_configuration: TopicConfigs,
+    // custom
+    disable_forwarding: bool,
 }
 
 impl Config {
@@ -476,6 +478,12 @@ impl Config {
     pub fn idontwant_on_publish(&self) -> bool {
         self.idontwant_on_publish
     }
+
+    /// In special cases we would like to disable any forwarding, IHAVE and IWANT capabilities.
+    /// This can be useful for collecting network wide infromation while being "latent"
+    pub fn disable_forwarding(&self) -> bool {
+        self.disable_forwarding
+    }
 }
 
 impl Default for Config {
@@ -546,6 +554,8 @@ impl Default for ConfigBuilder {
                 idontwant_message_size_threshold: 1000,
                 idontwant_on_publish: false,
                 topic_configuration: TopicConfigs::default(),
+                // custom
+                disable_forwarding: false,
             },
             invalid_protocol: false,
         }

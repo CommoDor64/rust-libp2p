@@ -2863,6 +2863,14 @@ where
     /// sending the message failed due to the channel to the connection handler being
     /// full (which indicates a slow peer).
     fn send_message(&mut self, peer_id: PeerId, rpc: RpcOut) -> bool {
+        if self.config.disable_forwarding() {
+            tracing::info!(peer = %peer_id, "Forwarding, IHAVE and IWANT messages are disabled");
+            match rpc {
+                RpcOut::Forward { .. } | RpcOut::IHave(_) | RpcOut::IWant(_) => return true,
+                _ => (),
+            };
+        }
+
         #[cfg(feature = "metrics")]
         if let Some(m) = self.metrics.as_mut() {
             if let RpcOut::Publish { ref message, .. } | RpcOut::Forward { ref message, .. } = rpc {

@@ -71,18 +71,10 @@ impl Queue {
             RpcOut::Graft(_) | RpcOut::Prune(_) | RpcOut::IDontWant(_) => {
                 self.control.try_push(message)
             }
-            RpcOut::Publish { .. } => self.non_priority.try_push(message),
-            RpcOut::IHave(_) | RpcOut::IWant(_) =>
-            {
-                #[cfg(not(feature = "disable-forward"))]
-                self.non_priority.try_push(message)
-            }
-
-            RpcOut::Forward { .. } =>
-            {
-                #[cfg(not(feature = "disable-forward"))]
-                self.non_priority.try_push(message)
-            }
+            RpcOut::Publish { .. }
+            | RpcOut::IHave(_)
+            | RpcOut::IWant(_)
+            | RpcOut::Forward { .. } => self.non_priority.try_push(message),
         }
     }
 
