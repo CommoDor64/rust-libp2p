@@ -1085,6 +1085,11 @@ impl ConfigBuilder {
         self
     }
 
+    pub fn set_forwarding_disabled(&mut self) -> &mut Self {
+        self.config.disable_forwarding = true;
+        self
+    }
+
     /// Constructs a [`Config`] from the given configuration and validates the settings.
     pub fn build(&self) -> Result<Config, ConfigBuilderError> {
         // check all constraints on config
